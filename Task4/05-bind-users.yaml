@@ -1,0 +1,68 @@
+# ---------------------------
+# DevOps: full cluster admin
+# ---------------------------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: devops-user-cluster-admin
+subjects:
+  - kind: User
+    name: devops-user
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+
+---
+# ---------------------------
+# Security: audit cluster-wide (read + secrets)
+# ---------------------------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: security-user-auditor
+subjects:
+  - kind: User
+    name: security-user
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: security-auditor
+  apiGroup: rbac.authorization.k8s.io
+
+---
+# ---------------------------
+# Sales domain admin: manage only sales namespace
+# ---------------------------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sales-admin-domain-admin
+  namespace: sales
+subjects:
+  - kind: User
+    name: sales-admin
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: domain-admin
+  apiGroup: rbac.authorization.k8s.io
+
+---
+# ---------------------------
+# Analyst: readonly only in sales namespace
+# ---------------------------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: analyst-user-readonly
+  namespace: sales
+subjects:
+  - kind: User
+    name: analyst-user
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: developer-readonly
+  apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,24 @@
+@startuml C4_Elements
+
+!include ./C4-PlantUML-Git/C4_Context.puml
+!include <office/users/users.puml>
+
+title Диаграмма контекста - PropDevelopment
+
+Person_Ext(Customer, "Собственники", $sprite="users")
+Person(User, "Бизнес-аналитик", $sprite="users")
+System(SmartHomeAccess, "SmartHome Access", "Приложение для домофона и шлагбаума", "", "", "", "")
+System(CRM, "CRM", "Система управления данными собственников", "", "", "", "")
+System_Ext(DeviceAPI, "Device API", "", "", "", "", "")
+SystemDb(S3	, "DWH Хранилище", "", "", "", "", "")
+
+Rel_D(Customer, SmartHomeAccess, "Использует систему", "", "", "", "", "")
+Rel_D(User, SmartHomeAccess, "Администрирует систему", "", "", "", "", "")
+Rel_L(SmartHomeAccess, DeviceAPI, "Управляет домофоном и шлагбаумом", "", "", "", "", "")
+Rel_D(SmartHomeAccess, S3, "Сохраняет данные", "", "", "", "", "")
+Rel_D(SmartHomeAccess, CRM, "Запрашивает данны по собственникам", "", "", "", "", "")
+
+Lay_L(S3, CRM)
+
+
+@enduml
